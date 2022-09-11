@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SportsRec</string>
+
+    <string name="auth_email_input_hint">Email</string>
+    <string name="auth_password_input_hint">Password</string>
+    <string name="auth_btn_signin">Sign In</string>
+    <string name="auth_btn_signup">Sign Up</string>
+    <string name="auth_invalid_password_and_email_empty">Email and password can\'t be empty.</string>
+    <string name="auth_invalid_password_empty">Password can\'t be empty.</string>
+    <string name="auth_invalid_email_empty">Email can\'t be empty.</string>
+    <string name="auth_invalid_short_password">Password is too short.</string>
+    <string name="auth_invalid_email">Email doesn\'t have a valid format.</string>
+</resources>

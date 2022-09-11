@@ -1,0 +1,81 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    namespace 'com.pavelhabzansky.sportsrec'
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.pavelhabzansky.sportsrec"
+        minSdk 28
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.2.0'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+    implementation project(Modules.domain)
+    implementation project(Modules.data)
+
+    implementation Androidx.ktxCore
+    implementation Androidx.lifecycleRuntime
+    implementation Androidx.activityCompose
+    implementation Androidx.material3
+
+    implementation Hilt.hilt
+    implementation Hilt.hiltNavCompose
+    kapt Hilt.hiltCompiler
+
+    implementation Compose.navigation
+    implementation Compose.composeUi
+    implementation Compose.composeUiTooling
+    debugImplementation Compose.composeUiTooling
+
+    implementation platform('com.google.firebase:firebase-bom:30.3.0')
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
+
+    testImplementation Testing.junit
+    androidTestImplementation Testing.androidxJunit
+    androidTestImplementation Testing.espresso
+    androidTestImplementation Testing.composeJunit
+    debugImplementation Testing.composeTestManifest
+}
+
+apply plugin: 'com.google.gms.google-services'
