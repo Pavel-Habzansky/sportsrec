@@ -1,4 +1,5 @@
 package com.pavelhabzansky.domain.features.auth.model
 
-class User {
-}
+data class User(
+    val email: String
+)

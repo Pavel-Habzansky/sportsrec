@@ -67,6 +67,10 @@ dependencies {
     implementation Compose.composeUiTooling
     debugImplementation Compose.composeUiTooling
 
+    kapt Room.roomCompiler
+    implementation Room.roomRuntime
+    implementation Room.roomKtx
+
     implementation platform('com.google.firebase:firebase-bom:30.3.0')
     implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
