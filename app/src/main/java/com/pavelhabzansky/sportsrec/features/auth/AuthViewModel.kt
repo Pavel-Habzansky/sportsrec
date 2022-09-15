@@ -27,6 +27,10 @@ class AuthViewModel @Inject constructor(
     var loginState by mutableStateOf(LoginState())
         private set
 
+    init {
+        loginState = LoginState()
+    }
+
     fun onEmailInput(input: String) {
         loginState = loginState.copy(email = input)
     }
@@ -36,6 +40,9 @@ class AuthViewModel @Inject constructor(
     }
 
     fun onEvent(event: AuthEvent) {
+        loginState = loginState.copy(
+            screenState = AuthScreenState.Loading
+        )
         when (event) {
             is AuthEvent.SignInClick -> {
                 if (!validateInputs(loginState.email, loginState.password)) {
@@ -45,9 +52,10 @@ class AuthViewModel @Inject constructor(
                 val signInParams = SignInUseCase.Params(
                     email = loginState.email,
                     password = loginState.password,
-                    onSuccess = ::onSignInSuccess,
+                    onSignInSuccess = ::onSignInSuccess,
                     onError = ::onSignInError
                 )
+
                 signIn(signInParams)
             }
             is AuthEvent.SignUpClick -> {
@@ -106,22 +114,28 @@ class AuthViewModel @Inject constructor(
     private fun onSignInSuccess() {
         viewModelScope.launch(Dispatchers.Main) {
             _uiEvent.send(UiEvent.Navigate(Route.RECORD_LIST))
+            loginState = LoginState()
         }
     }
 
     private fun onSignInError(throwable: Throwable) {
         val message = UiText.DynamicText(throwable.message ?: "")
         sendSnack(message)
+
+        loginState = loginState.copy(
+            screenState = AuthScreenState.Idle
+        )
     }
 
     private fun onSignUpSuccess() {
         viewModelScope.launch(Dispatchers.Main) {
-            _uiEvent.send(UiEvent.Navigate(Route.RECORD_LIST))
+
         }
     }
 
     private fun onSignUpError(throwable: Throwable) {
-
+        val message = UiText.DynamicText(throwable.message ?: "")
+        sendSnack(message)
     }
 
 }
