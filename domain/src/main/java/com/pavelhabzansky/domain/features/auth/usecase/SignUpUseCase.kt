@@ -10,9 +10,14 @@ class SignUpUseCase @Inject constructor(
         authService.signUp(
             email = params.email,
             password = params.password,
-            onSuccess = params.onSuccess,
-            onError = params.onError
-        )
+        ) {
+            if (it != null) {
+                params.onError(it)
+                return@signUp
+            }
+
+            params.onSuccess()
+        }
     }
 
     data class Params(

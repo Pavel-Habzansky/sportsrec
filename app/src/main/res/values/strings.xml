@@ -3,6 +3,7 @@
 
     <string name="auth_email_input_hint">Email</string>
     <string name="auth_password_input_hint">Password</string>
+    <string name="auth_welcome_text">Welcome</string>
     <string name="auth_btn_signin">Sign In</string>
     <string name="auth_btn_signup">Sign Up</string>
     <string name="auth_invalid_password_and_email_empty">Email and password can\'t be empty.</string>

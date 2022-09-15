@@ -12,6 +12,5 @@ class SportsRecApp : Application() {
         super.onCreate()
 
         FirebaseApp.initializeApp(this)
-        Firebase.auth
     }
 }

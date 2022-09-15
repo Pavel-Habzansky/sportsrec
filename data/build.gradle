@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -34,8 +35,11 @@ dependencies {
 
     implementation project(Modules.domain)
 
+    kapt Room.roomCompiler
+    implementation Room.roomRuntime
+    implementation Room.roomKtx
+
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.5.0'
 
     implementation platform('com.google.firebase:firebase-bom:30.3.0')
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'

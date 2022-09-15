@@ -10,15 +10,20 @@ class SignInUseCase @Inject constructor(
         authService.signIn(
             email = params.email,
             password = params.password,
-            onSuccess = params.onSuccess,
-            onError = params.onError
-        )
+        ) {
+            if (it != null) {
+                params.onError(it)
+                return@signIn
+            }
+
+            params.onSignInSuccess()
+        }
     }
 
     data class Params(
         val email: String,
         val password: String,
-        val onSuccess: () -> Unit,
+        val onSignInSuccess: () -> Unit,
         val onError: (Throwable) -> Unit
     )
 }
