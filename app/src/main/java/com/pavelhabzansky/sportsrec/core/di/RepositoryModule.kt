@@ -1,7 +1,10 @@
 package com.pavelhabzansky.sportsrec.core.di
 
+import com.pavelhabzansky.data.core.AppDatabase
 import com.pavelhabzansky.data.features.auth.service.AuthServiceImpl
+import com.pavelhabzansky.data.features.sports_records.repository.SportsRecordsRepositoryImpl
 import com.pavelhabzansky.domain.features.auth.service.AuthService
+import com.pavelhabzansky.domain.features.sports_records.repository.SportsRecordsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,5 +19,15 @@ object RepositoryModule {
     @Singleton
     fun provideAuthService(): AuthService {
         return AuthServiceImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSportsRecordsRepository(
+        db: AppDatabase
+    ): SportsRecordsRepository {
+        return SportsRecordsRepositoryImpl(
+            sportsRecordsDao = db.sportsRecordDao
+        )
     }
 }

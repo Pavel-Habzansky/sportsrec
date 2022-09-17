@@ -39,7 +39,7 @@ dependencies {
     implementation Room.roomRuntime
     implementation Room.roomKtx
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation Gson.gson
 
     implementation platform('com.google.firebase:firebase-bom:30.3.0')
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
