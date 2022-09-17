@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -71,9 +72,13 @@ dependencies {
     implementation Room.roomRuntime
     implementation Room.roomKtx
 
-    implementation platform('com.google.firebase:firebase-bom:30.3.0')
-    implementation 'com.google.firebase:firebase-core:21.1.1'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
+    implementation Timber.timber
+
+    implementation platform(Firebase.firebaseBom)
+    implementation Firebase.firebaseCore
+    implementation Firebase.firebaseAuth
+    implementation Firebase.firebaseCrashlytics
+    implementation Firebase.firebaseAnalytics
 
     testImplementation Testing.junit
     androidTestImplementation Testing.androidxJunit
