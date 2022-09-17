@@ -29,8 +29,7 @@ class FileLogTree(
         val logLevel = mapLogLevel(priority)
         val timestamp = logTimestampFormat.format(Date())
         val writer = FileWriter(logFile, true)
-        val messageLog = "$timestamp ${logLevel.identifier} ${tag ?: ""} $message ${t ?: ""}"
-        writer.appendLine(messageLog)
+        writer.appendLine("$timestamp ${logLevel.identifier} $message ${t ?: ""}")
         writer.flush()
         writer.close()
 
