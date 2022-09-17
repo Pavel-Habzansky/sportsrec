@@ -12,4 +12,11 @@ object Versions {
     const val androidxJunit = "1.1.3"
     const val espresso = "3.4.0"
     const val gson = "2.9.1"
+    const val timber = "5.0.1"
+
+    const val firebaseBom = "30.5.0"
+    const val firebaseCore = "21.1.1"
+    const val firebaseAuth = "21.0.8"
+    const val firebaseCrashlytics = "18.2.13"
+    const val firebaseAnalytics = "21.1.1"
 }
