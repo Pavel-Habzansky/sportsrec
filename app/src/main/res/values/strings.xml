@@ -11,4 +11,6 @@
     <string name="auth_invalid_email_empty">Email can\'t be empty.</string>
     <string name="auth_invalid_short_password">Password is too short.</string>
     <string name="auth_invalid_email">Email doesn\'t have a valid format.</string>
+
+    <string name="records_list_empty_message">There are no performance records.</string>
 </resources>
