@@ -14,6 +14,10 @@ fun SportsRecordEntity.toDomain(): SportsRecord {
     )
 }
 
+fun List<SportsRecordEntity>.toDomain(): List<SportsRecord> {
+    return map { it.toDomain() }
+}
+
 fun SportsRecord.toEntity(): SportsRecordEntity {
     return SportsRecordEntity(
         name = name,
