@@ -6,5 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface SportsRecordsRepository {
 
     fun getSportsRecordsFlow(): Flow<List<SportsRecord>>
+    suspend fun createSportsRecord(record: SportsRecord)
+    suspend fun clearOldData(newEmail: String)
 
 }

@@ -13,4 +13,30 @@
     <string name="auth_invalid_email">Email doesn\'t have a valid format.</string>
 
     <string name="records_list_empty_message">There are no performance records.</string>
+
+    <string name="record_type_weightlifting">Weightlifting</string>
+    <string name="record_type_sprint">Sprint</string>
+    <string name="record_type_rope_jump">Rope jump</string>
+    <string name="record_type_custom">Custom</string>
+    <string name="record_type_none" />
+
+    <string name="new_record_sport_pick_label">Sport</string>
+    <string name="new_record_sport_pick_message">Pick type of your performance!</string>
+    <string name="new_record_name">Name</string>
+    <string name="new_record_weight_label">Weight</string>
+    <string name="new_record_set_pick_label">Sets</string>
+    <string name="new_record_set_input_label">Set %1$d</string>
+    <string name="new_record_sprint_distance">Distance</string>
+    <string name="new_record_rope_jumps">Jumps</string>
+    <string name="new_record_custom_performance">Performance</string>
+    <string name="new_record_time">Time</string>
+    <string name="new_record_storage_type_title">Storage type: </string>
+    <string name="new_record_unit_weight">kg</string>
+    <string name="new_record_unit_time">s</string>
+    <string name="new_record_unit_distance">m</string>
+    <string name="new_record_save">Save</string>
+    <string name="new_record_invalid_inputs">Inputs are not valid!</string>
+
+    <string name="storage_type_local">Local</string>
+    <string name="storage_type_remote">Remote</string>
 </resources>

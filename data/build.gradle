@@ -46,7 +46,11 @@ dependencies {
     implementation platform(Firebase.firebaseBom)
     implementation Firebase.firebaseAuth
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation Moshi.moshi
+    implementation Moshi.moshiKotlin
+    implementation Moshi.moshiAdapters
+
+    testImplementation Testing.junit
+    androidTestImplementation Testing.androidxJunit
+    androidTestImplementation Testing.espresso
 }

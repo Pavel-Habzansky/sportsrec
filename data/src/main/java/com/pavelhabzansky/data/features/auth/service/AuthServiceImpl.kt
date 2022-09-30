@@ -11,20 +11,20 @@ class AuthServiceImpl(
     override fun signIn(
         email: String,
         password: String,
-        onComplete: (Throwable?) -> Unit
+        onComplete: (String?, Throwable?) -> Unit
     ) {
         Firebase.auth
             .signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task -> onComplete(task.exception) }
+            .addOnCompleteListener { task -> onComplete(task.result.user?.email, task.exception) }
     }
 
     override fun signUp(
         email: String,
         password: String,
-        onComplete: (Throwable?) -> Unit
+        onComplete: (String?, Throwable?) -> Unit
     ) {
         Firebase.auth
             .createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task -> onComplete(task.exception) }
+            .addOnCompleteListener { task -> onComplete(task.result.user?.email, task.exception) }
     }
 }

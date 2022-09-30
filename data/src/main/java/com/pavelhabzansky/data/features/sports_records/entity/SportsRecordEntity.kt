@@ -6,11 +6,13 @@ import java.time.LocalDateTime
 
 @Entity
 data class SportsRecordEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Long? = null,
     val name: String,
-    val location: String,
-    val duration: Long,
+    val performanceRecord: PerformanceEntity,
+    val location: String?,
+    val synced: Boolean,
     val storage: String,
-    val createTime: LocalDateTime
+    val createTime: LocalDateTime,
+    val owner: String
 )

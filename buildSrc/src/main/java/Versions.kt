@@ -13,6 +13,9 @@ object Versions {
     const val espresso = "3.4.0"
     const val gson = "2.9.1"
     const val timber = "5.0.1"
+    const val moshi = "1.8.0"
+    const val mapsCompose = "2.7.2"
+    const val playServiceMaps = "18.1.0"
 
     const val firebaseBom = "30.5.0"
     const val firebaseCore = "21.1.1"

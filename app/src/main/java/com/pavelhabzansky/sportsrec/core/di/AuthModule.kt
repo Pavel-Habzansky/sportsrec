@@ -2,6 +2,7 @@ package com.pavelhabzansky.sportsrec.core.di
 
 import com.pavelhabzansky.domain.features.auth.service.AuthService
 import com.pavelhabzansky.domain.features.auth.usecase.*
+import com.pavelhabzansky.domain.features.sports_records.repository.SportsRecordsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +26,15 @@ object AuthModule {
         authService: AuthService
     ): SignUpUseCase {
         return SignUpUseCase(authService)
+    }
+
+    @Provides
+    fun provideClearOldUsersDataUseCase(
+        sportsRecordsRepository: SportsRecordsRepository
+    ): ClearOldUsersDataUseCase {
+        return ClearOldUsersDataUseCase(
+            sportsRecordsRepository = sportsRecordsRepository
+        )
     }
 
     @Provides

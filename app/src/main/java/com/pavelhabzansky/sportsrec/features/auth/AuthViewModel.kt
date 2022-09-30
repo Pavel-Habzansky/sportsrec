@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.pavelhabzansky.domain.features.auth.usecase.ClearOldUsersDataUseCase
 import com.pavelhabzansky.domain.features.auth.usecase.SignInUseCase
 import com.pavelhabzansky.domain.features.auth.usecase.SignUpUseCase
 import com.pavelhabzansky.domain.features.auth.usecase.ValidateAuthInputUseCase
@@ -15,12 +16,14 @@ import com.pavelhabzansky.sportsrec.core.ui.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val signIn: SignInUseCase,
     private val signUp: SignUpUseCase,
+    private val clearOldUsersData: ClearOldUsersDataUseCase,
     private val validateAuthInput: ValidateAuthInputUseCase
 ) : BaseViewModel() {
 
@@ -111,8 +114,11 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun onSignInSuccess() {
+    private fun onSignInSuccess(email: String) {
         viewModelScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
+                clearOldUsersData(ClearOldUsersDataUseCase.Params(email))
+            }
             _uiEvent.send(UiEvent.Navigate(Route.RECORD_LIST))
             loginState = LoginState()
         }
@@ -125,17 +131,6 @@ class AuthViewModel @Inject constructor(
         loginState = loginState.copy(
             screenState = AuthScreenState.Idle
         )
-    }
-
-    private fun onSignUpSuccess() {
-        viewModelScope.launch(Dispatchers.Main) {
-
-        }
-    }
-
-    private fun onSignUpError(throwable: Throwable) {
-        val message = UiText.DynamicText(throwable.message ?: "")
-        sendSnack(message)
     }
 
 }
