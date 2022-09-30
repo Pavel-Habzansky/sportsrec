@@ -18,4 +18,7 @@ interface SportsRecordsDao {
 
     @Query("SELECT * FROM SportsRecordEntity WHERE storage = :storage")
     fun getSportsRecordsFlowByStorage(storage: String): Flow<List<SportsRecordEntity>>
+
+    @Query("DELETE FROM SportsRecordEntity WHERE owner != :newEmail")
+    fun clearRecords(newEmail: String)
 }

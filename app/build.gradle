@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -79,6 +80,9 @@ dependencies {
     implementation Firebase.firebaseAuth
     implementation Firebase.firebaseCrashlytics
     implementation Firebase.firebaseAnalytics
+
+    implementation GoogleServices.mapsCompose
+    implementation GoogleServices.playServicesMaps
 
     testImplementation Testing.junit
     androidTestImplementation Testing.androidxJunit

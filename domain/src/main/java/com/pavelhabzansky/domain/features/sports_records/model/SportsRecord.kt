@@ -4,8 +4,8 @@ import java.time.LocalDateTime
 
 data class SportsRecord(
     val name: String,
-    val location: String,
-    val duration: Long,
+    val performanceRecord: PerformanceRecord,
+    val location: String?,
     val storage: StorageType,
     val createTime: LocalDateTime
 )

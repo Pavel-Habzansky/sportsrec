@@ -18,7 +18,8 @@ import java.time.LocalDate
 @TypeConverters(
     value = [
         LocalDateTimeConverter::class,
-        SportsTypeConverter::class
+        SportsTypeConverter::class,
+        PerformanceEntityConverter::class
     ]
 )
 abstract class AppDatabase : RoomDatabase() {

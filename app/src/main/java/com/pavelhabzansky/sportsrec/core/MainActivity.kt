@@ -14,6 +14,7 @@ import com.pavelhabzansky.sportsrec.core.navigation.Route
 import com.pavelhabzansky.sportsrec.core.navigation.navigate
 import com.pavelhabzansky.sportsrec.core.ui.theme.SportsRecTheme
 import com.pavelhabzansky.sportsrec.features.auth.AuthScreen
+import com.pavelhabzansky.sportsrec.features.new_record.NewRecordScreen
 import com.pavelhabzansky.sportsrec.features.record_list.RecordsListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,7 +48,11 @@ class MainActivity : ComponentActivity() {
 
                         }
                         composable(Route.NEW_RECORD) {
-
+                            NewRecordScreen(
+                                onNavigate = navController::navigate,
+                                navigateUp = navController::navigateUp,
+                                snackbarHostState = scaffoldState.snackbarHostState
+                            )
                         }
                     }
                 }
