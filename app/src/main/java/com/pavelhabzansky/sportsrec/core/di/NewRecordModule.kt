@@ -50,6 +50,12 @@ object NewRecordModule {
 
     @Provides
     @Singleton
+    fun provideGenerateRandomIdUseCase(): GenerateRandomIdUseCase {
+        return GenerateRandomIdUseCase()
+    }
+
+    @Provides
+    @Singleton
     fun provideSaveNewRecordUseCase(
         recordsRepository: SportsRecordsRepository
     ): SaveNewRecordUseCase {

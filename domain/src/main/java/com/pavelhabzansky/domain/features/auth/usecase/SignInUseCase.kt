@@ -11,13 +11,13 @@ class SignInUseCase @Inject constructor(
         authService.signIn(
             email = params.email,
             password = params.password,
-        ) { email, throwable ->
+        ) { newUid, throwable ->
             if (throwable != null) {
                 params.onError(throwable)
                 return@signIn
             }
 
-            params.onSignInSuccess(requireNotNull(email))
+            params.onSignInSuccess(requireNotNull(newUid))
         }
     }
 

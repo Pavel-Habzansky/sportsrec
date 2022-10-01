@@ -22,7 +22,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +32,8 @@ class NewRecordViewModel @Inject constructor(
     private val isTimeInputValid: IsTimeInputValidUseCase,
     private val isRopeJumpsInputValid: IsRopeJumpsInputValidUseCase,
     private val isSportsRecordValid: IsSportsRecordValidUseCase,
-    private val saveNewRecord: SaveNewRecordUseCase
+    private val saveNewRecord: SaveNewRecordUseCase,
+    private val generateRandomId: GenerateRandomIdUseCase
 ) : BaseViewModel() {
 
     var newRecordState by mutableStateOf<NewRecordState>(NewRecordState.None)
@@ -65,10 +65,11 @@ class NewRecordViewModel @Inject constructor(
     private fun handleSaveButtonClick() {
         val record = try {
             SportsRecord(
+                id = generateRandomId(),
                 name = name,
                 performanceRecord = newRecordState.toDomain(),
                 location = selectedLocation?.mapToString(),
-                createTime = LocalDateTime.now(),
+                createTime = System.currentTimeMillis(),
                 storage = storageType.toDomain()
             )
         } catch (ex: Exception) {

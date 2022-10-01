@@ -13,6 +13,9 @@ interface SportsRecordsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(entity: SportsRecordEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(entities: List<SportsRecordEntity>)
+
     @Query("SELECT * FROM SportsRecordEntity")
     fun getSportsRecordsFlow(): Flow<List<SportsRecordEntity>>
 

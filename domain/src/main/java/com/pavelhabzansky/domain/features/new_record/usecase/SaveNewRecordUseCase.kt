@@ -14,6 +14,7 @@ class SaveNewRecordUseCase(
 
             if (params.record.storage == StorageType.REMOTE) {
                 // TODO Upload sports record
+                sportsRecordsRepository.uploadSportsRecord(params.record)
             }
 
             Result.Success(true)
