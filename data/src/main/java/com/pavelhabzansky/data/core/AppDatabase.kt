@@ -17,7 +17,6 @@ import java.time.LocalDate
 )
 @TypeConverters(
     value = [
-        LocalDateTimeConverter::class,
         SportsTypeConverter::class,
         PerformanceEntityConverter::class
     ]
@@ -25,5 +24,9 @@ import java.time.LocalDate
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val sportsRecordDao: SportsRecordsDao
+
+    companion object {
+        const val DB_NAME = "sports_rec_db"
+    }
 
 }

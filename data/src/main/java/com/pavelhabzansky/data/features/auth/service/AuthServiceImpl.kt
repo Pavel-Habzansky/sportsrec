@@ -15,7 +15,7 @@ class AuthServiceImpl(
     ) {
         Firebase.auth
             .signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task -> onComplete(task.result.user?.email, task.exception) }
+            .addOnCompleteListener { task -> onComplete(task.result.user?.uid, task.exception) }
     }
 
     override fun signUp(
@@ -25,6 +25,6 @@ class AuthServiceImpl(
     ) {
         Firebase.auth
             .createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task -> onComplete(task.result.user?.email, task.exception) }
+            .addOnCompleteListener { task -> onComplete(task.result.user?.uid, task.exception) }
     }
 }

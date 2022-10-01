@@ -7,10 +7,10 @@ class ClearOldUsersDataUseCase(
 ) {
 
     suspend operator fun invoke(params: Params) {
-        sportsRecordsRepository.clearOldData(params.newEmail)
+        sportsRecordsRepository.clearOldData(params.newUid)
     }
 
     data class Params(
-        val newEmail: String
+        val newUid: String
     )
 }

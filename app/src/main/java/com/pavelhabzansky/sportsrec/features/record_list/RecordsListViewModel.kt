@@ -1,7 +1,10 @@
 package com.pavelhabzansky.sportsrec.features.record_list
 
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
+import com.pavelhabzansky.domain.features.sports_records.usecase.FetchSportsRecordsUseCase
 import com.pavelhabzansky.domain.features.sports_records.usecase.GetSportsRecordsUseCase
 import com.pavelhabzansky.sportsrec.core.BaseViewModel
 import com.pavelhabzansky.sportsrec.core.navigation.Route
@@ -16,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecordsListViewModel @Inject constructor(
-    private val getSportsRecords: GetSportsRecordsUseCase
+    private val getSportsRecords: GetSportsRecordsUseCase,
+    private val fetchSportsRecords: FetchSportsRecordsUseCase
 ) : BaseViewModel() {
 
     var sportsRecords = emptyFlow<List<SportsRecord>>()
@@ -24,6 +28,12 @@ class RecordsListViewModel @Inject constructor(
 
     init {
         sportsRecords = getSportsRecords()
+    }
+
+    fun onResume() {
+        viewModelScope.launch {
+            fetchSportsRecords()
+        }
     }
 
     fun onEvent(event: RecordsListEvent) {

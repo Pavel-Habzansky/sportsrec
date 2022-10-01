@@ -11,13 +11,13 @@ class SignUpUseCase @Inject constructor(
         authService.signUp(
             email = params.email,
             password = params.password,
-        ) { email, throwable ->
+        ) { newUid, throwable ->
             if (throwable != null) {
                 params.onError(throwable)
                 return@signUp
             }
 
-            params.onSuccess(requireNotNull(email))
+            params.onSuccess(requireNotNull(newUid))
         }
     }
 

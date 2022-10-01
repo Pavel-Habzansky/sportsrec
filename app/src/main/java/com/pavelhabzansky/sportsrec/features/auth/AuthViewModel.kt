@@ -114,10 +114,10 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun onSignInSuccess(email: String) {
+    private fun onSignInSuccess(newUid: String) {
         viewModelScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
-                clearOldUsersData(ClearOldUsersDataUseCase.Params(email))
+                clearOldUsersData(ClearOldUsersDataUseCase.Params(newUid))
             }
             _uiEvent.send(UiEvent.Navigate(Route.RECORD_LIST))
             loginState = LoginState()

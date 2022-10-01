@@ -7,15 +7,15 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
 import com.pavelhabzansky.sportsrec.R
 import com.pavelhabzansky.sportsrec.core.navigation.UiEvent
@@ -26,6 +26,25 @@ fun RecordsListScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: RecordsListViewModel = hiltViewModel()
 ) {
+
+    val lifecycleOwner = rememberUpdatedState(newValue = LocalLifecycleOwner.current)
+    DisposableEffect(key1 = lifecycleOwner.value) {
+        val lifecycle = lifecycleOwner.value.lifecycle
+        val observer = LifecycleEventObserver { owner, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    viewModel.onResume()
+                }
+                else -> {}
+            }
+
+        }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
+        }
+    }
+
     LaunchedEffect(true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
