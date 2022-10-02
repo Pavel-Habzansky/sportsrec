@@ -10,6 +10,7 @@ import com.pavelhabzansky.data.features.sports_records.api.PerformanceRecordDto
 import com.pavelhabzansky.data.features.sports_records.api.RemoteApiService
 import com.pavelhabzansky.data.features.sports_records.common.PerformanceType
 import com.pavelhabzansky.data.features.sports_records.entity.PerformanceEntity
+import com.pavelhabzansky.sportsrec.core.preferences.FilterPreferences
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -77,6 +78,14 @@ object AppModule {
     @Singleton
     fun provideRemoteDBApi(retrofit: Retrofit): RemoteApiService {
         return retrofit.create(RemoteApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFilterPreferences(
+        @ApplicationContext context: Context
+    ): FilterPreferences {
+        return FilterPreferences(context)
     }
 
 }

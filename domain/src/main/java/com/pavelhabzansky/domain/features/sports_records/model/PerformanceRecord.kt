@@ -9,7 +9,7 @@ sealed class PerformanceRecord {
         val repsPerSet: Map<Int, Int>
     ) : PerformanceRecord() {
         override fun isValid(): Boolean {
-            return weight > 0 && sets > 0 && repsPerSet.size == sets && repsPerSet.none { it.value > 0 }
+            return weight > 0 && sets > 0 && repsPerSet.size == sets && repsPerSet.all { it.value > 0 }
         }
     }
 

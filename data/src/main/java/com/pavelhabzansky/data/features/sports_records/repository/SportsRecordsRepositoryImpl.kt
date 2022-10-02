@@ -6,9 +6,11 @@ import com.pavelhabzansky.data.features.sports_records.api.RemoteApiService
 import com.pavelhabzansky.data.features.sports_records.dao.SportsRecordsDao
 import com.pavelhabzansky.data.features.sports_records.toDataTransfer
 import com.pavelhabzansky.data.features.sports_records.toDomain
-import com.pavelhabzansky.domain.core.Result
 import com.pavelhabzansky.data.features.sports_records.toEntity
+import com.pavelhabzansky.domain.features.sports_records.model.FetchRemotesResult
 import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
+import com.pavelhabzansky.domain.features.sports_records.model.StorageType
+import com.pavelhabzansky.domain.features.sports_records.model.UploadLocalsResult
 import com.pavelhabzansky.domain.features.sports_records.repository.SportsRecordsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -38,12 +40,12 @@ class SportsRecordsRepositoryImpl(
             val uid = Firebase.auth.currentUser?.uid
             if (uid != null) {
                 val dataTransfer = record.toDataTransfer()
-                val response = remoteApi.postRecord(
+                val response = remoteApi.putRecord(
                     uid = uid,
                     key = record.id,
                     body = dataTransfer
                 ).await()
-                Timber.i(response.string())
+                Timber.i(response.body().toString())
             }
         }
     }
@@ -52,34 +54,79 @@ class SportsRecordsRepositoryImpl(
         sportsRecordsDao.clearRecords(newUid)
     }
 
-    override suspend fun fetchRemoteData(): Result<Unit> {
+    override suspend fun fetchRemoteData(): FetchRemotesResult {
         return withContext(Dispatchers.IO) {
-            val uid = Firebase.auth.currentUser?.uid
-            if (uid != null) {
-                val response = remoteApi.getRecords(uid).await()
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    body?.let { dataMap ->
-                        val entities = dataMap.map {
-                            it.value.toEntity(ownerUid = uid, key = it.key)
+            try {
+                val uid = Firebase.auth.currentUser?.uid
+                if (uid != null) {
+                    val response = remoteApi.getRecords(uid).await()
+                    if (response.isSuccessful) {
+                        val body = response.body()
+                        body?.let { dataMap ->
+                            val entities = dataMap.map {
+                                it.value.toEntity(ownerUid = uid, key = it.key)
+                            }
+                            val current = sportsRecordsDao.getAllRecords()
+                                .map { it.id }
+                            sportsRecordsDao.insert(entities)
+
+                            val diff = entities.count { !current.contains(it.id) }
+                            if (diff == 0) {
+                                FetchRemotesResult.NoNewData
+                            } else {
+                                FetchRemotesResult.DownloadSuccess(diff)
+                            }
+                        } ?: run {
+                            FetchRemotesResult.DownloadFailure(IllegalStateException("Response body is empty!"))
                         }
-                        sportsRecordsDao.insert(entities)
-                        Result.Success(Unit)
-                    } ?: run {
-                        Result.Failure(
-                            throwable = IllegalStateException("Response has no body")
-                        )
+                    } else {
+                        FetchRemotesResult.DownloadFailure(IllegalStateException("API call was unsuccessful! code=${response.code()}"))
                     }
                 } else {
-                    Result.Failure(
-                        throwable = IllegalStateException("Response is not successful! code = ${response.code()}")
-                    )
+                    FetchRemotesResult.DownloadFailure(IllegalStateException("User has no UID!"))
                 }
-            } else {
-                Result.Failure(
-                    throwable = IllegalStateException("User does not have uid!")
-                )
+            } catch (ex: Exception) {
+                Timber.w(ex, "Download of remote records was unsuccessful")
+                FetchRemotesResult.DownloadFailure(ex)
             }
+
+        }
+    }
+
+    override suspend fun uploadLocalRecords(): UploadLocalsResult {
+        return withContext(Dispatchers.IO) {
+            try {
+                var successCount = 0
+                val uid = Firebase.auth.currentUser?.uid
+                if (uid == null) {
+                    return@withContext UploadLocalsResult.UploadFailure()
+                }
+                val localRecords = sportsRecordsDao.getLocalRecords()
+                if (localRecords.isEmpty()) {
+                    return@withContext UploadLocalsResult.NoDataToUpload
+                }
+                val dataTransfers = localRecords.toDataTransfer()
+                dataTransfers.forEach { record ->
+                    val response = remoteApi.putRecord(
+                        uid = uid,
+                        key = requireNotNull(record.key),
+                        body = record
+                    ).await()
+
+                    if (response.isSuccessful) {
+                        sportsRecordsDao.updateStorage(
+                            id = record.key,
+                            storage = StorageType.REMOTE.name
+                        )
+                        successCount++
+                    }
+                }
+                UploadLocalsResult.UploadSuccessful(successCount)
+            } catch (ex: Exception) {
+                Timber.w(ex, "Upload of local records was unsuccessful")
+                UploadLocalsResult.UploadFailure(ex)
+            }
+
         }
     }
 
