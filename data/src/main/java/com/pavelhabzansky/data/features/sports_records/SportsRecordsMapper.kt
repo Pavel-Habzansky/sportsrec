@@ -43,6 +43,42 @@ fun PerformanceEntity.toDomain(): PerformanceRecord {
     }
 }
 
+fun List<SportsRecordEntity>.toDataTransfer(): List<SportsRecordDto> {
+    return map { it.toDataTransfer() }
+}
+
+fun SportsRecordEntity.toDataTransfer(): SportsRecordDto {
+    return SportsRecordDto(
+        key = id,
+        name = name,
+        performanceRecord = performanceRecord.toDataTransfer(),
+        location = location,
+        createTime = createTime
+    )
+}
+
+fun PerformanceEntity.toDataTransfer(): PerformanceRecordDto {
+    return when (this) {
+        is PerformanceEntity.WeightliftingEntity -> PerformanceRecordDto.Weightlifting(
+            weight = weight,
+            sets = sets,
+            repsPerSet = repsPerSet.values.toList()
+        )
+        is PerformanceEntity.SprintEntity -> PerformanceRecordDto.Sprint(
+            distance = distance,
+            time = time
+        )
+        is PerformanceEntity.RopeJumpEntity -> PerformanceRecordDto.RopeJump(
+            jumps = jumps,
+            time = time
+        )
+        is PerformanceEntity.CustomRecordEntity -> PerformanceRecordDto.CustomRecord(
+            performance = performance,
+            time = time
+        )
+    }
+}
+
 fun List<SportsRecordEntity>.toDomain(): List<SportsRecord> {
     return map { it.toDomain() }
 }
@@ -84,6 +120,7 @@ fun PerformanceRecord.toEntity(): PerformanceEntity {
 
 fun SportsRecord.toDataTransfer(): SportsRecordDto {
     return SportsRecordDto(
+        key = id,
         name = name,
         performanceRecord = performanceRecord.toDataTransfer(),
         location = location,
@@ -96,7 +133,7 @@ fun PerformanceRecord.toDataTransfer(): PerformanceRecordDto {
         is PerformanceRecord.Weightlifting -> PerformanceRecordDto.Weightlifting(
             weight = weight,
             sets = sets,
-            repsPerSet = repsPerSet
+            repsPerSet = repsPerSet.values.toList()
         )
         is PerformanceRecord.Sprint -> PerformanceRecordDto.Sprint(
             distance = distance,
@@ -134,7 +171,7 @@ fun PerformanceRecordDto.toEntity(): PerformanceEntity {
         is PerformanceRecordDto.Weightlifting -> PerformanceEntity.WeightliftingEntity(
             weight = weight,
             sets = sets,
-            repsPerSet = repsPerSet
+            repsPerSet = repsPerSet.mapIndexed { index, i -> index + 1 to i }.toMap()
         )
         is PerformanceRecordDto.Sprint -> PerformanceEntity.SprintEntity(
             distance = distance,

@@ -17,6 +17,9 @@ interface SportsRecordsDao {
     fun insert(entities: List<SportsRecordEntity>)
 
     @Query("SELECT * FROM SportsRecordEntity")
+    fun getAllRecords(): List<SportsRecordEntity>
+
+    @Query("SELECT * FROM SportsRecordEntity")
     fun getSportsRecordsFlow(): Flow<List<SportsRecordEntity>>
 
     @Query("SELECT * FROM SportsRecordEntity WHERE storage = :storage")
@@ -24,4 +27,10 @@ interface SportsRecordsDao {
 
     @Query("DELETE FROM SportsRecordEntity WHERE owner != :newEmail")
     fun clearRecords(newEmail: String)
+
+    @Query("SELECT * FROM SportsRecordEntity WHERE storage = 'LOCAL'")
+    fun getLocalRecords(): List<SportsRecordEntity>
+
+    @Query("UPDATE SportsRecordEntity SET storage = :storage WHERE id = :id")
+    fun updateStorage(id: String, storage: String)
 }

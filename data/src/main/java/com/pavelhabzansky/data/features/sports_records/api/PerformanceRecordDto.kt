@@ -8,7 +8,7 @@ sealed class PerformanceRecordDto(@Json(name = "type") val type: PerformanceType
     data class Weightlifting(
         val weight: Int,
         val sets: Int,
-        val repsPerSet: Map<Int, Int>
+        val repsPerSet: List<Int>
     ) : PerformanceRecordDto(PerformanceType.WEIGHTLIFTING)
 
     data class Sprint(

@@ -14,9 +14,9 @@ interface RemoteApiService {
     fun getRecords(@Path("uid") uid: String): Deferred<Response<Map<String, SportsRecordDto>>>
 
     @PUT("{uid}/records/{new_record_key}.json")
-    fun postRecord(
+    fun putRecord(
         @Path("uid") uid: String,
         @Path("new_record_key") key: String,
         @Body body: SportsRecordDto
-    ): Deferred<ResponseBody>
+    ): Deferred<Response<Any>>
 }

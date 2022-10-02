@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
                         composable(Route.RECORD_LIST) {
                             RecordsListScreen(
                                 onNavigate = navController::navigate,
+                                snackbarHostState = scaffoldState.snackbarHostState
                             )
                         }
                         composable(Route.RECORD_DETAIL) {
