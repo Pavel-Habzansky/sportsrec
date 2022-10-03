@@ -19,6 +19,8 @@ Navigation is handled through `Compose Navigation`. Navigation events are merged
 
 Project dependencies are managed through `buildSrc` module.
 
+Project uses `Firebase Crashlytics` for crash reporting.
+
 ## App module
 App module contains app configuration, `Hilt` modules, screens and view models for different features.
 
