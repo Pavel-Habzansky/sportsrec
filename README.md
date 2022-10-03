@@ -7,13 +7,17 @@ This README also contains my thoughts on different possible approaches and imple
 ## Overview
 SportsRec uses standard MVVM architecture and `Clean Architecture` code structure, mainly separation of concerns, code base is divided into three different modules:
 
-- app - module concerned with app configuration and views, it has access to both domain and data modules
-- domain - module concerned with business logic, this module should always be independent of platform (no access to things like Context, ViewModel, etc), it also provides interfaces for data module
-- data - module concerned with data storage and remote communication, it has access to domain module
+- `app` - module concerned with app configuration and views, it has access to both domain and data modules
+- `domain` - module concerned with business logic, this module should always be independent of platform (no access to things like Context, ViewModel, etc), it also provides interfaces for data module
+- `data` - module concerned with data storage and remote communication, it has access to domain module
 
 There are multiple other approaches that could have been used (MVI is getting traction in recent months). Notably we could have separated app module into two different modules - app module for application configuration and Application itself and presentation for screens and ViewModels, that way, we could better separate module concerned with views from data module.
 
 It would often make sense to use feature based approach - different feature modules in root of the project and presentation/domain/data layers in each feature module - but this sample app doesn't contain that many features for this approach to make sense.
+
+Navigation is handled through `Compose Navigation`. Navigation events are merged together with `Snackbars` into instances of `UiEvent` to make their handling more streamlined. Each `ViewModel` has `UiEvent` flow that can be observed from screens through `collect()`. UI actions such as field inputs and button clicks are handled through `ViewModel` by calling `onEvent()` functions, `ViewModel` modifies data accordingly and screen is then automatically recomposed.
+
+Project dependencies are managed through `buildSrc` module.
 
 ## App module
 App module contains app configuration, `Hilt` modules, screens and view models for different features.
@@ -70,5 +74,13 @@ Record detail is a static screen listing information about given record. Record'
 ![Record detail screen](detail.png "Record detail screen")
 
 ## Conclusion
+We managed to build a simple application for recording sport performance in different sport types. Application is based on `Clean Architecture` principles and uses `MVVM` pattern.
 
 ### Possible improvements
+- Unit tests
+- UI design
+- Improvement of `TopAppBar` - currently each screen has its own `TopAppBar`, this has undesired effect of `TopAppBar` briefly flashing when navigating between screens
+- Migrate `.gradle` files to `Kotlin DSL`
+- More strict separation of modules - `app` into `app` and `presentation`, add `infrastructure` module, separate `remote` and `local` data work into different modules
+- Make `ViewModels` more abstract with some kind of `ScreenState` or `ScreenEvent` as generic types
+- Better logging
