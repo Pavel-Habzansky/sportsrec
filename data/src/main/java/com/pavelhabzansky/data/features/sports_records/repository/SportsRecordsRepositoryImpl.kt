@@ -32,21 +32,32 @@ class SportsRecordsRepositoryImpl(
     override suspend fun createSportsRecord(record: SportsRecord) {
         withContext(Dispatchers.IO) {
             val sportsRecordEntity = record.toEntity()
+            Timber.i("INSERT: $sportsRecordEntity")
             sportsRecordsDao.insert(sportsRecordEntity)
         }
     }
 
     override suspend fun uploadSportsRecord(record: SportsRecord) {
         withContext(Dispatchers.IO) {
-            val uid = Firebase.auth.currentUser?.uid
-            if (uid != null) {
-                val dataTransfer = record.toDataTransfer()
-                val response = remoteApi.putRecord(
-                    uid = uid,
-                    key = record.id,
-                    body = dataTransfer
-                ).await()
-                Timber.i(response.body().toString())
+            try {
+                val uid = Firebase.auth.currentUser?.uid
+                if (uid != null) {
+                    val dataTransfer = record.toDataTransfer()
+                    val response = remoteApi.putRecord(
+                        uid = uid,
+                        key = record.id,
+                        body = dataTransfer
+                    ).await()
+                    if (response.isSuccessful) {
+                        Timber.i("Upload of $dataTransfer successful")
+                    } else {
+                        Timber.w("Data were not sent: code=${response.code()}")
+                    }
+                } else {
+                    Timber.w("User UI is empty")
+                }
+            } catch (ex: Exception) {
+                Timber.w(ex, "Record upload fail")
             }
         }
     }
@@ -64,6 +75,7 @@ class SportsRecordsRepositoryImpl(
                     if (response.isSuccessful) {
                         val body = response.body()
                         body?.let { dataMap ->
+                            Timber.i("${dataMap.size} elements fetched from remote database")
                             val entities = dataMap.map {
                                 it.value.toEntity(ownerUid = uid, key = it.key)
                             }
@@ -72,6 +84,7 @@ class SportsRecordsRepositoryImpl(
                             sportsRecordsDao.insert(entities)
 
                             val diff = entities.count { !current.contains(it.id) }
+                            Timber.i("$diff new elements")
                             if (diff == 0) {
                                 FetchRemotesResult.NoNewData
                             } else {
@@ -103,6 +116,7 @@ class SportsRecordsRepositoryImpl(
                     return@withContext UploadLocalsResult.UploadFailure()
                 }
                 val localRecords = sportsRecordsDao.getLocalRecords()
+                Timber.i("There are ${localRecords.size} records to upload")
                 if (localRecords.isEmpty()) {
                     return@withContext UploadLocalsResult.NoDataToUpload
                 }
@@ -122,6 +136,7 @@ class SportsRecordsRepositoryImpl(
                         successCount++
                     }
                 }
+                Timber.i("$successCount records successfully uploaded")
                 UploadLocalsResult.UploadSuccessful(successCount)
             } catch (ex: Exception) {
                 Timber.w(ex, "Upload of local records was unsuccessful")
