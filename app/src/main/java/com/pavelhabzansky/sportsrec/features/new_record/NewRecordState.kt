@@ -1,58 +1,54 @@
 package com.pavelhabzansky.sportsrec.features.new_record
 
 import com.pavelhabzansky.domain.features.sports_records.model.PerformanceRecord
-import com.pavelhabzansky.sportsrec.features.new_record.model.NewRecordType
+import com.pavelhabzansky.sportsrec.features.new_record.model.RecordType
 
-sealed class NewRecordState(
-    val type: NewRecordType
+sealed class NewRecord(
+    val type: RecordType
 ) {
-    // I wish we could have copy() method on ordinary class objects, data class can have only val/var parameters to override
-    // That way `name` could be part of NewRecordState properties just like `type` is
-//    abstract val name: String
-
-    object None : NewRecordState(type = NewRecordType.NONE)
+    object None : NewRecord(type = RecordType.NONE)
 
     data class Weightlifting(
         val weight: String = "",
         val sets: Int,
         val repsPerSet: Map<Int, String>
-    ) : NewRecordState(type = NewRecordType.WEIGHTLIFTING)
+    ) : NewRecord(type = RecordType.WEIGHTLIFTING)
 
     data class Sprint(
         val distanceMeters: String = "",
         val time: String = ""
-    ) : NewRecordState(type = NewRecordType.SPRINT)
+    ) : NewRecord(type = RecordType.SPRINT)
 
     data class RopeJump(
         val jumps: String = "",
         val time: String = ""
-    ) : NewRecordState(type = NewRecordType.ROPE_JUMP)
+    ) : NewRecord(type = RecordType.ROPE_JUMP)
 
     data class Custom(
         val performance: String = "",
         val time: String = ""
-    ) : NewRecordState(type = NewRecordType.CUSTOM)
+    ) : NewRecord(type = RecordType.CUSTOM)
 
 }
 
-fun NewRecordState.toDomain(): PerformanceRecord {
+fun NewRecord.toDomain(): PerformanceRecord {
     return when (this) {
-        is NewRecordState.Weightlifting -> PerformanceRecord.Weightlifting(
+        is NewRecord.Weightlifting -> PerformanceRecord.Weightlifting(
             weight = weight.toInt(),
             sets = sets,
             repsPerSet = repsPerSet.mapValues {
                 it.value.toInt()
             }
         )
-        is NewRecordState.Sprint -> PerformanceRecord.Sprint(
+        is NewRecord.Sprint -> PerformanceRecord.Sprint(
             distance = distanceMeters.toInt(),
             time = time.toFloat()
         )
-        is NewRecordState.RopeJump -> PerformanceRecord.RopeJump(
+        is NewRecord.RopeJump -> PerformanceRecord.RopeJump(
             jumps = jumps.toInt(),
             time = time.toFloat()
         )
-        is NewRecordState.Custom -> PerformanceRecord.Custom(
+        is NewRecord.Custom -> PerformanceRecord.Custom(
             performance = performance,
             time = time.toFloat()
         )

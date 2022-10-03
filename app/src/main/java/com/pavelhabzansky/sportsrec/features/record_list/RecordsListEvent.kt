@@ -7,6 +7,14 @@ sealed class RecordsListEvent {
         val local: Boolean,
         val remote: Boolean
     ) : RecordsListEvent()
+
+    data class ItemClicked(
+        val id: String
+    ) : RecordsListEvent()
+
+    data class ItemDeleteClick(
+        val id: String
+    ): RecordsListEvent()
 }
 
 sealed class ControlBarEvent : RecordsListEvent() {

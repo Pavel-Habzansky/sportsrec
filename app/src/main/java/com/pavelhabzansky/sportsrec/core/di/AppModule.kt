@@ -9,7 +9,6 @@ import com.pavelhabzansky.data.core.BASE_URL
 import com.pavelhabzansky.data.features.sports_records.api.PerformanceRecordDto
 import com.pavelhabzansky.data.features.sports_records.api.RemoteApiService
 import com.pavelhabzansky.data.features.sports_records.common.PerformanceType
-import com.pavelhabzansky.data.features.sports_records.entity.PerformanceEntity
 import com.pavelhabzansky.sportsrec.core.preferences.FilterPreferences
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
@@ -20,7 +19,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 

@@ -1,4 +1,6 @@
-package com.pavelhabzansky.domain.features.sports_records.model
+package com.pavelhabzansky.domain.core.common
+
+import com.pavelhabzansky.domain.features.sports_records.model.PerformanceRecord
 
 data class SportsRecord(
     val id: String,

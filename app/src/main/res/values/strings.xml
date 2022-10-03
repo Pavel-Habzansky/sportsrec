@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">SportsRec</string>
 
+    <string name="screen_title_list">Record list</string>
+    <string name="screen_title_new_record">New record</string>
+    <string name="screen_title_detail">Record detail</string>
+
     <string name="auth_email_input_hint">Email</string>
     <string name="auth_password_input_hint">Password</string>
     <string name="auth_welcome_text">Welcome</string>
@@ -38,6 +42,20 @@
     <string name="new_record_save">Save</string>
     <string name="new_record_invalid_inputs">Inputs are not valid!</string>
 
+    <string name="record_detail_sport_label">Sport</string>
+    <string name="record_detail_name_label">Name</string>
+    <string name="record_detail_weight_label">Weight</string>
+    <string name="record_detail_weight_unit">Weight</string>
+    <string name="record_detail_sets_label">Sets</string>
+    <string name="record_detail_set_label">Set %1$d</string>
+    <string name="record_detail_distance_label">Distance</string>
+    <string name="record_detail_distance_unit">m</string>
+    <string name="record_detail_time_label">Time</string>
+    <string name="record_detail_time_unit">s</string>
+    <string name="record_detail_jumps_label">Jumps</string>
+    <string name="record_detail_custom_label">Performance</string>
+    <string name="record_detail_delete">Delete</string>
+
     <string name="storage_type_local">Local</string>
     <string name="storage_type_remote">Remote</string>
 
@@ -69,4 +87,6 @@
 
     <string name="loading_upload">Uploading…</string>
     <string name="loading_synchronize">Synchronizing…</string>
+
+    <string name="record_delete_error">Record couldn\'t be deleted</string>
 </resources>

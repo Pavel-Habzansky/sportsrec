@@ -7,8 +7,8 @@ import com.pavelhabzansky.data.features.sports_records.api.SportsRecordDto
 import com.pavelhabzansky.data.features.sports_records.entity.PerformanceEntity
 import com.pavelhabzansky.data.features.sports_records.entity.SportsRecordEntity
 import com.pavelhabzansky.domain.features.sports_records.model.PerformanceRecord
-import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
-import com.pavelhabzansky.domain.features.sports_records.model.StorageType
+import com.pavelhabzansky.domain.core.common.SportsRecord
+import com.pavelhabzansky.domain.core.common.StorageType
 
 fun SportsRecordEntity.toDomain(): SportsRecord {
     return SportsRecord(

@@ -1,5 +1,7 @@
 package com.pavelhabzansky.sportsrec.features.record_list
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,6 +11,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,9 +33,11 @@ import com.pavelhabzansky.sportsrec.core.components.LoadingDialog
 import com.pavelhabzansky.sportsrec.core.navigation.UiEvent
 import com.pavelhabzansky.sportsrec.features.record_list.model.RecordListItem
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RecordsListScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
+    navigateUp: () -> Unit,
     snackbarHostState: SnackbarHostState,
     viewModel: RecordsListViewModel = hiltViewModel()
 ) {
@@ -38,7 +45,7 @@ fun RecordsListScreen(
     val lifecycleOwner = rememberUpdatedState(newValue = LocalLifecycleOwner.current)
     DisposableEffect(key1 = lifecycleOwner.value) {
         val lifecycle = lifecycleOwner.value.lifecycle
-        val observer = LifecycleEventObserver { owner, event ->
+        val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_CREATE -> {
                     viewModel.onResume()
@@ -92,7 +99,6 @@ fun RecordsListScreen(
     val records by viewModel.sportsRecords.collectAsState(initial = emptyList())
 
     Scaffold(
-        modifier = Modifier.padding(8.dp),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { viewModel.onEvent(RecordsListEvent.NewRecordClick) },
@@ -100,25 +106,61 @@ fun RecordsListScreen(
             ) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = null)
             }
+        },
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.screen_title_list)) },
+                backgroundColor = MaterialTheme.colors.primary,
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Navigate back",
+                        modifier = Modifier.clickable { navigateUp() }
+                    )
+                },
+                actions = {
+                    IconButton(onClick = { viewModel.onEvent(ControlBarEvent.FilterClickEvent) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_filter_list),
+                            contentDescription = null
+                        )
+                    }
+                    IconButton(onClick = { viewModel.onEvent(ControlBarEvent.UploadClickEvent) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_synchronize),
+                            contentDescription = null
+                        )
+                    }
+                    IconButton(onClick = { viewModel.onEvent(ControlBarEvent.SynchronizeClickEvent) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_refresh),
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
         }
     ) {
         Column(
             modifier = Modifier
+                .padding(8.dp)
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            ControlBar(clickHandler = viewModel::onEvent)
-            Spacer(modifier = Modifier.height(16.dp))
-            Divider()
-            Spacer(modifier = Modifier.height(16.dp))
-
             if (records.isEmpty()) {
                 Empty()
             } else {
                 LazyColumn {
-                    items(records) { record ->
-                        SportRecordItem(record)
+                    items(records, key = { it.id }) { record ->
+                        SportRecordItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp)
+                                .clickable { viewModel.onEvent(RecordsListEvent.ItemClicked(record.id)) }
+                                .animateItemPlacement(),
+                            item = record,
+                            onDeleteClick = { viewModel.onEvent(RecordsListEvent.ItemDeleteClick(it)) }
+                        )
                     }
                 }
             }
@@ -127,35 +169,49 @@ fun RecordsListScreen(
 }
 
 @Composable
-fun SportRecordItem(item: RecordListItem) {
+fun SportRecordItem(
+    modifier: Modifier = Modifier,
+    item: RecordListItem,
+    onDeleteClick: (String) -> Unit
+) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp)
-            .clickable { },
+        modifier = modifier,
         elevation = 8.dp
     ) {
-        Column(
-            modifier = Modifier.padding(12.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+        Row {
+            Column(
+                modifier = Modifier.padding(12.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(item.color)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = item.name, fontWeight = FontWeight.Bold)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(id = item.image),
+                        contentDescription = null
+                    )
+//                    Box(
+//                        modifier = Modifier
+//                            .size(10.dp)
+//                            .clip(CircleShape)
+//                            .background(item.color)
+//                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = item.name, fontWeight = FontWeight.Bold)
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                PerformanceContent(item)
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = item.createTime)
             }
-            Spacer(modifier = Modifier.height(16.dp))
 
-            PerformanceContent(item)
+            Spacer(modifier = Modifier.weight(1f, true))
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = item.createTime)
+            IconButton(onClick = { onDeleteClick(item.id) }) {
+                Icon(imageVector = Icons.Filled.Delete, contentDescription = null)
+            }
         }
         Box(
             modifier = Modifier

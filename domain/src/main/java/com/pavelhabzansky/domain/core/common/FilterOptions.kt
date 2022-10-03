@@ -1,4 +1,4 @@
-package com.pavelhabzansky.domain.features.sports_records.model
+package com.pavelhabzansky.domain.core.common
 
 data class FilterOptions(
     val local: Boolean,

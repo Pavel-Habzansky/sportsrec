@@ -1,7 +1,7 @@
 package com.pavelhabzansky.sportsrec.features.new_record.model
 
 import androidx.annotation.StringRes
-import com.pavelhabzansky.domain.features.sports_records.model.StorageType
+import com.pavelhabzansky.domain.core.common.StorageType
 import com.pavelhabzansky.sportsrec.R
 
 enum class StorageTypeView(@StringRes val textId: Int) {

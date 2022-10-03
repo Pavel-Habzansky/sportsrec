@@ -1,8 +1,8 @@
 package com.pavelhabzansky.domain.features.sports_records.usecase
 
-import com.pavelhabzansky.domain.features.sports_records.model.FilterOptions
-import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
-import com.pavelhabzansky.domain.features.sports_records.model.StorageType
+import com.pavelhabzansky.domain.core.common.FilterOptions
+import com.pavelhabzansky.domain.core.common.SportsRecord
+import com.pavelhabzansky.domain.core.common.StorageType
 
 class FilterRecordsUseCase {
     operator fun invoke(params: Params): List<SportsRecord> {
