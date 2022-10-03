@@ -4,13 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.pavelhabzansky.domain.core.Result
 import com.pavelhabzansky.domain.features.sports_records.model.FetchRemotesResult
-import com.pavelhabzansky.domain.features.sports_records.model.FilterOptions
+import com.pavelhabzansky.domain.core.common.FilterOptions
 import com.pavelhabzansky.domain.features.sports_records.model.UploadLocalsResult
-import com.pavelhabzansky.domain.features.sports_records.usecase.FetchSportsRecordsUseCase
-import com.pavelhabzansky.domain.features.sports_records.usecase.FilterRecordsUseCase
-import com.pavelhabzansky.domain.features.sports_records.usecase.GetSportsRecordsUseCase
-import com.pavelhabzansky.domain.features.sports_records.usecase.UploadLocalRecordsUseCase
+import com.pavelhabzansky.domain.features.sports_records.usecase.*
 import com.pavelhabzansky.sportsrec.R
 import com.pavelhabzansky.sportsrec.core.BaseViewModel
 import com.pavelhabzansky.sportsrec.core.navigation.Route
@@ -31,6 +29,7 @@ class RecordsListViewModel @Inject constructor(
     private val fetchSportsRecords: FetchSportsRecordsUseCase,
     private val filterRecordsUseCase: FilterRecordsUseCase,
     private val uploadLocalRecords: UploadLocalRecordsUseCase,
+    private val deleteRecord: DeleteRecordUseCase,
     private val filterPreferences: FilterPreferences
 ) : BaseViewModel() {
 
@@ -57,7 +56,7 @@ class RecordsListViewModel @Inject constructor(
         sportsRecords = getSportsRecords()
             .map {
                 val filtered = filterRecordsUseCase(FilterRecordsUseCase.Params(it, filterOptions))
-                filtered.toListItems()
+                filtered.sortedByDescending { it.createTime }.toListItems()
             }
     }
 
@@ -76,6 +75,20 @@ class RecordsListViewModel @Inject constructor(
                 )
                 filterPreferences.storeFilterOptions(filterOptions)
                 loadSportsRecords()
+            }
+            is RecordsListEvent.ItemClicked -> {
+                viewModelScope.launch {
+                    _uiEvent.send(UiEvent.Navigate("${Route.RECORD_DETAIL}/${event.id}"))
+                }
+            }
+            is RecordsListEvent.ItemDeleteClick -> {
+                viewModelScope.launch {
+                    val uiEvent = when (deleteRecord(DeleteRecordUseCase.Params(event.id))) {
+                        is Result.Success -> UiEvent.NavigateUp
+                        else -> UiEvent.Snackbar(UiText.ResourceText(R.string.record_delete_error))
+                    }
+                    _uiEvent.send(uiEvent)
+                }
             }
             is ControlBarEvent -> handleControlBarEvent(event)
         }

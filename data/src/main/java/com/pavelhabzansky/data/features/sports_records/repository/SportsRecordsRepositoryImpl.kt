@@ -6,10 +6,11 @@ import com.pavelhabzansky.data.features.sports_records.api.RemoteApiService
 import com.pavelhabzansky.data.features.sports_records.dao.SportsRecordsDao
 import com.pavelhabzansky.data.features.sports_records.toDataTransfer
 import com.pavelhabzansky.data.features.sports_records.toDomain
+import com.pavelhabzansky.domain.core.Result
 import com.pavelhabzansky.data.features.sports_records.toEntity
 import com.pavelhabzansky.domain.features.sports_records.model.FetchRemotesResult
-import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
-import com.pavelhabzansky.domain.features.sports_records.model.StorageType
+import com.pavelhabzansky.domain.core.common.SportsRecord
+import com.pavelhabzansky.domain.core.common.StorageType
 import com.pavelhabzansky.domain.features.sports_records.model.UploadLocalsResult
 import com.pavelhabzansky.domain.features.sports_records.repository.SportsRecordsRepository
 import kotlinx.coroutines.Dispatchers
@@ -126,8 +127,40 @@ class SportsRecordsRepositoryImpl(
                 Timber.w(ex, "Upload of local records was unsuccessful")
                 UploadLocalsResult.UploadFailure(ex)
             }
-
         }
     }
 
+    override suspend fun getSportRecordById(id: String): SportsRecord {
+        return withContext(Dispatchers.IO) {
+            sportsRecordsDao.getRecordById(id).toDomain()
+        }
+    }
+
+    override suspend fun deleteSportsRecord(id: String): Result<Boolean> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val record = sportsRecordsDao.getRecordById(id)
+                if (record.storage == StorageType.REMOTE.name) {
+                    val uid = Firebase.auth.uid
+                    if (uid != null) {
+                        val response = remoteApi.deleteRecord(uid, id).await()
+                        if (response.isSuccessful) {
+                            Timber.i("Remote record deletion response code: ${response.code()}")
+                        } else {
+                            throw IllegalStateException("Couldn't delete remote record due to HTTP error")
+                        }
+                    } else {
+                        throw IllegalStateException("Couldn't delete remote record due to empty UID")
+                    }
+                }
+
+                sportsRecordsDao.deleteSportsRecordById(id)
+
+                Result.Success(true)
+            } catch (ex: Exception) {
+                Timber.w(ex, "Error occurred during record deleetion")
+                Result.Failure(ex)
+            }
+        }
+    }
 }

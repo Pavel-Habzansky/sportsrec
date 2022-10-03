@@ -1,9 +1,9 @@
 package com.pavelhabzansky.sportsrec.features.record_list
 
-import androidx.compose.ui.graphics.Color
+import com.pavelhabzansky.domain.core.common.SportsRecord
+import com.pavelhabzansky.domain.core.common.StorageType
 import com.pavelhabzansky.domain.features.sports_records.model.PerformanceRecord
-import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
-import com.pavelhabzansky.domain.features.sports_records.model.StorageType
+import com.pavelhabzansky.sportsrec.R
 import com.pavelhabzansky.sportsrec.features.record_list.model.RecordListItem
 import com.pavelhabzansky.sportsrec.features.record_list.model.StorageListType
 import java.text.SimpleDateFormat
@@ -34,7 +34,7 @@ fun SportsRecord.toListItem(): RecordListItem {
                 id = id,
                 name = name,
                 createTime = createTime.mapToListDate(),
-                color = Color(0xffffeb3b),
+                image = R.drawable.weightlifter,
                 storageType = storage.mapToListType(),
                 weight = performance.weight,
                 sets = performance.sets,
@@ -47,7 +47,7 @@ fun SportsRecord.toListItem(): RecordListItem {
                 id = id,
                 name = name,
                 createTime = createTime.mapToListDate(),
-                color = Color(0xff73e8ff),
+                image = R.drawable.sprint,
                 storageType = storage.mapToListType(),
                 distance = performance.distance,
                 time = performance.time
@@ -58,7 +58,7 @@ fun SportsRecord.toListItem(): RecordListItem {
             RecordListItem.RopeJumpListItem(
                 id = id,
                 name = name,
-                color = Color(0xffc62828),
+                image = R.drawable.jump_rope,
                 storageType = storage.mapToListType(),
                 createTime = createTime.mapToListDate(),
                 jumps = performance.jumps,
@@ -71,7 +71,7 @@ fun SportsRecord.toListItem(): RecordListItem {
                 id = id,
                 name = name,
                 createTime = createTime.mapToListDate(),
-                color = Color(0xfffb8c00),
+                image = R.drawable.speedometer,
                 storageType = storage.mapToListType(),
                 performance = performance.performance,
                 time = performance.time

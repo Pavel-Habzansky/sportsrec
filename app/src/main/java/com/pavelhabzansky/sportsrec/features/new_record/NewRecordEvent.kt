@@ -1,11 +1,11 @@
 package com.pavelhabzansky.sportsrec.features.new_record
 
 import com.google.android.gms.maps.model.LatLng
-import com.pavelhabzansky.sportsrec.features.new_record.model.NewRecordType
+import com.pavelhabzansky.sportsrec.features.new_record.model.RecordType
 import com.pavelhabzansky.sportsrec.features.new_record.model.StorageTypeView
 
 sealed class NewRecordEvent {
-    data class RecordTypeChanged(val newType: NewRecordType) : NewRecordEvent()
+    data class RecordTypeChanged(val newType: RecordType) : NewRecordEvent()
     data class StorageTypeChanged(val newStorageType: StorageTypeView) : NewRecordEvent()
     data class OnLocationSelected(val newLocation: LatLng) : NewRecordEvent()
     object SaveButtonClicked : NewRecordEvent()

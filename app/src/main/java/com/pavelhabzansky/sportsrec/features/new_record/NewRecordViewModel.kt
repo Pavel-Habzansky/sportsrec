@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.pavelhabzansky.domain.features.new_record.usecase.*
-import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
+import com.pavelhabzansky.domain.core.common.SportsRecord
 import com.pavelhabzansky.sportsrec.R
 import com.pavelhabzansky.sportsrec.core.BaseViewModel
 import com.pavelhabzansky.sportsrec.core.navigation.UiEvent
@@ -15,7 +15,7 @@ import com.pavelhabzansky.sportsrec.core.ui.UiText
 import com.pavelhabzansky.sportsrec.core.utils.mapToString
 import com.pavelhabzansky.sportsrec.features.new_record.NewRecordEvent.RecordTypeChanged
 import com.pavelhabzansky.sportsrec.features.new_record.NewRecordEvent.StorageTypeChanged
-import com.pavelhabzansky.sportsrec.features.new_record.model.NewRecordType
+import com.pavelhabzansky.sportsrec.features.new_record.model.RecordType
 import com.pavelhabzansky.sportsrec.features.new_record.model.StorageTypeView
 import com.pavelhabzansky.sportsrec.features.new_record.model.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +36,7 @@ class NewRecordViewModel @Inject constructor(
     private val generateRandomId: GenerateRandomIdUseCase
 ) : BaseViewModel() {
 
-    var newRecordState by mutableStateOf<NewRecordState>(NewRecordState.None)
+    var newRecordState by mutableStateOf<NewRecord>(NewRecord.None)
         private set
 
     var name by mutableStateOf("")
@@ -107,7 +107,7 @@ class NewRecordViewModel @Inject constructor(
         when (event) {
             is CustomRecordEvent.OnNameInputEvent -> name = event.newName
             is CustomRecordEvent.OnPerformanceValueInputEvent -> {
-                val currentState = newRecordState as NewRecordState.Custom
+                val currentState = newRecordState as NewRecord.Custom
                 newRecordState = currentState.copy(
                     performance = event.performance
                 )
@@ -118,7 +118,7 @@ class NewRecordViewModel @Inject constructor(
                     return
                 }
 
-                val currentState = newRecordState as NewRecordState.Custom
+                val currentState = newRecordState as NewRecord.Custom
                 newRecordState = currentState.copy(
                     time = event.newTime
                 )
@@ -135,7 +135,7 @@ class NewRecordViewModel @Inject constructor(
                     return
                 }
 
-                val currentState = newRecordState as NewRecordState.RopeJump
+                val currentState = newRecordState as NewRecord.RopeJump
                 newRecordState = currentState.copy(
                     jumps = event.newJumpCount
                 )
@@ -146,7 +146,7 @@ class NewRecordViewModel @Inject constructor(
                     return
                 }
 
-                val currentState = newRecordState as NewRecordState.RopeJump
+                val currentState = newRecordState as NewRecord.RopeJump
                 newRecordState = currentState.copy(
                     time = event.newTime
                 )
@@ -163,7 +163,7 @@ class NewRecordViewModel @Inject constructor(
                     return
                 }
 
-                val currentState = newRecordState as NewRecordState.Sprint
+                val currentState = newRecordState as NewRecord.Sprint
                 newRecordState = currentState.copy(
                     distanceMeters = event.newDistance
                 )
@@ -174,7 +174,7 @@ class NewRecordViewModel @Inject constructor(
                     return
                 }
 
-                val currentState = newRecordState as NewRecordState.Sprint
+                val currentState = newRecordState as NewRecord.Sprint
                 newRecordState = currentState.copy(
                     time = event.newTime
                 )
@@ -192,13 +192,13 @@ class NewRecordViewModel @Inject constructor(
                 }
                 // I tried to avoid type checking/type casting newRecordState variable but there might be a better way to handle this.
                 // This could possibly be thread unsafe
-                val currentState = newRecordState as NewRecordState.Weightlifting
+                val currentState = newRecordState as NewRecord.Weightlifting
                 newRecordState = currentState.copy(
                     weight = event.newWeight
                 )
             }
             is WeightliftingRecordEvent.OnSetsInputEvent -> {
-                val currentState = newRecordState as NewRecordState.Weightlifting
+                val currentState = newRecordState as NewRecord.Weightlifting
                 val currentRepMap = currentState.repsPerSet
                 val newRepMap = mutableMapOf<Int, String>()
                 repeat(event.newSetCount) { i -> newRepMap[i] = currentRepMap[i] ?: "" }
@@ -214,7 +214,7 @@ class NewRecordViewModel @Inject constructor(
                     return
                 }
 
-                val currentState = newRecordState as NewRecordState.Weightlifting
+                val currentState = newRecordState as NewRecord.Weightlifting
                 val newRepsPerSet = currentState.repsPerSet.toMutableMap()
                 newRepsPerSet[event.set] = event.newRepCount
                 newRecordState = currentState.copy(
@@ -224,23 +224,23 @@ class NewRecordViewModel @Inject constructor(
         }
     }
 
-    private fun changeRecordType(newType: NewRecordType) {
+    private fun changeRecordType(newType: RecordType) {
         if (newType == newRecordState.type) return
 
         Timber.i("Record type is being changed to: ${newType.name}")
         when (newType) {
-            NewRecordType.WEIGHTLIFTING -> {
+            RecordType.WEIGHTLIFTING -> {
                 val repsPerSet = mutableMapOf<Int, String>()
                 repeat(DEFAULT_SET_COUNT) { i -> repsPerSet[i] = "" }
 
-                newRecordState = NewRecordState.Weightlifting(
+                newRecordState = NewRecord.Weightlifting(
                     sets = repsPerSet.size,
                     repsPerSet = repsPerSet
                 )
             }
-            NewRecordType.SPRINT -> newRecordState = NewRecordState.Sprint()
-            NewRecordType.ROPE_JUMP -> newRecordState = NewRecordState.RopeJump()
-            NewRecordType.CUSTOM -> newRecordState = NewRecordState.Custom()
+            RecordType.SPRINT -> newRecordState = NewRecord.Sprint()
+            RecordType.ROPE_JUMP -> newRecordState = NewRecord.RopeJump()
+            RecordType.CUSTOM -> newRecordState = NewRecord.Custom()
             else -> {}
         }
     }

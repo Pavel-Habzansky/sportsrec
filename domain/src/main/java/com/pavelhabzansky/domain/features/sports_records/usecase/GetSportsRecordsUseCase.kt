@@ -1,6 +1,6 @@
 package com.pavelhabzansky.domain.features.sports_records.usecase
 
-import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
+import com.pavelhabzansky.domain.core.common.SportsRecord
 import com.pavelhabzansky.domain.features.sports_records.repository.SportsRecordsRepository
 import kotlinx.coroutines.flow.Flow
 

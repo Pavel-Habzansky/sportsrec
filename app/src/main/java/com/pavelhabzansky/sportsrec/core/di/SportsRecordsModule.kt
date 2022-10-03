@@ -1,10 +1,8 @@
 package com.pavelhabzansky.sportsrec.core.di
 
+import com.pavelhabzansky.domain.features.record_detail.usecase.GetRecordByIdUseCase
 import com.pavelhabzansky.domain.features.sports_records.repository.SportsRecordsRepository
-import com.pavelhabzansky.domain.features.sports_records.usecase.FetchSportsRecordsUseCase
-import com.pavelhabzansky.domain.features.sports_records.usecase.FilterRecordsUseCase
-import com.pavelhabzansky.domain.features.sports_records.usecase.GetSportsRecordsUseCase
-import com.pavelhabzansky.domain.features.sports_records.usecase.UploadLocalRecordsUseCase
+import com.pavelhabzansky.domain.features.sports_records.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,6 +45,26 @@ object SportsRecordsModule {
         sportsRecordsRepository: SportsRecordsRepository
     ): UploadLocalRecordsUseCase {
         return UploadLocalRecordsUseCase(sportsRecordsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetRecordByIdUseCase(
+        sportsRecordsRepository: SportsRecordsRepository
+    ): GetRecordByIdUseCase {
+        return GetRecordByIdUseCase(
+            sportsRecordsRepository = sportsRecordsRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteRecordUseCase(
+        sportsRecordsRepository: SportsRecordsRepository
+    ): DeleteRecordUseCase {
+        return DeleteRecordUseCase(
+            sportsRecordsRepository = sportsRecordsRepository
+        )
     }
 
 }

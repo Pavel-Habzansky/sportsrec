@@ -1,7 +1,7 @@
 package com.pavelhabzansky.domain.features.new_record.usecase
 
-import com.pavelhabzansky.domain.features.sports_records.model.SportsRecord
-import com.pavelhabzansky.domain.features.sports_records.model.StorageType
+import com.pavelhabzansky.domain.core.common.SportsRecord
+import com.pavelhabzansky.domain.core.common.StorageType
 import com.pavelhabzansky.domain.features.sports_records.repository.SportsRecordsRepository
 import com.pavelhabzansky.domain.core.Result
 

@@ -2,7 +2,7 @@ package com.pavelhabzansky.sportsrec.core.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.pavelhabzansky.domain.features.sports_records.model.FilterOptions
+import com.pavelhabzansky.domain.core.common.FilterOptions
 
 class FilterPreferences(context: Context) {
     private val prefs: SharedPreferences

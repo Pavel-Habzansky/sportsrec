@@ -16,6 +16,9 @@ interface SportsRecordsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(entities: List<SportsRecordEntity>)
 
+    @Query("SELECT * FROM SportsRecordEntity WHERE id = :id")
+    fun getRecordById(id: String): SportsRecordEntity
+
     @Query("SELECT * FROM SportsRecordEntity")
     fun getAllRecords(): List<SportsRecordEntity>
 
@@ -33,4 +36,7 @@ interface SportsRecordsDao {
 
     @Query("UPDATE SportsRecordEntity SET storage = :storage WHERE id = :id")
     fun updateStorage(id: String, storage: String)
+
+    @Query("DELETE FROM SportsRecordEntity WHERE id = :id")
+    fun deleteSportsRecordById(id: String)
 }
