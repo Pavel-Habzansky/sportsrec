@@ -1,6 +1,7 @@
 package com.pavelhabzansky.domain.features.auth.usecase
 
 import com.pavelhabzansky.domain.features.auth.service.AuthService
+import com.pavelhabzansky.domain.features.sports_records.repository.SportsRecordsRepository
 import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(
@@ -10,15 +11,20 @@ class SignUpUseCase @Inject constructor(
         authService.signUp(
             email = params.email,
             password = params.password,
-            onSuccess = params.onSuccess,
-            onError = params.onError
-        )
+        ) { newUid, throwable ->
+            if (throwable != null) {
+                params.onError(throwable)
+                return@signUp
+            }
+
+            params.onSuccess(requireNotNull(newUid))
+        }
     }
 
     data class Params(
         val email: String,
         val password: String,
-        val onSuccess: () -> Unit,
+        val onSuccess: (String) -> Unit,
         val onError: (Throwable) -> Unit
     )
 }

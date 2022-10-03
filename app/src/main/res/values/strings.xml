@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">SportsRec</string>
 
+    <string name="screen_title_list">Record list</string>
+    <string name="screen_title_new_record">New record</string>
+    <string name="screen_title_detail">Record detail</string>
+
     <string name="auth_email_input_hint">Email</string>
     <string name="auth_password_input_hint">Password</string>
+    <string name="auth_welcome_text">Welcome</string>
     <string name="auth_btn_signin">Sign In</string>
     <string name="auth_btn_signup">Sign Up</string>
     <string name="auth_invalid_password_and_email_empty">Email and password can\'t be empty.</string>
@@ -10,4 +15,78 @@
     <string name="auth_invalid_email_empty">Email can\'t be empty.</string>
     <string name="auth_invalid_short_password">Password is too short.</string>
     <string name="auth_invalid_email">Email doesn\'t have a valid format.</string>
+    <string name="auth_loading">Please wait…</string>
+
+    <string name="records_list_empty_message">There are no performance records.</string>
+
+    <string name="record_type_weightlifting">Weightlifting</string>
+    <string name="record_type_sprint">Sprint</string>
+    <string name="record_type_rope_jump">Rope jump</string>
+    <string name="record_type_custom">Custom</string>
+    <string name="record_type_none" />
+
+    <string name="new_record_sport_pick_label">Sport</string>
+    <string name="new_record_sport_pick_message">Pick type of your performance!</string>
+    <string name="new_record_name">Name</string>
+    <string name="new_record_weight_label">Weight</string>
+    <string name="new_record_set_pick_label">Sets</string>
+    <string name="new_record_set_input_label">Set %1$d</string>
+    <string name="new_record_sprint_distance">Distance</string>
+    <string name="new_record_rope_jumps">Jumps</string>
+    <string name="new_record_custom_performance">Performance</string>
+    <string name="new_record_time">Time</string>
+    <string name="new_record_storage_type_title">Storage type: </string>
+    <string name="new_record_unit_weight">kg</string>
+    <string name="new_record_unit_time">s</string>
+    <string name="new_record_unit_distance">m</string>
+    <string name="new_record_save">Save</string>
+    <string name="new_record_invalid_inputs">Inputs are not valid!</string>
+
+    <string name="record_detail_sport_label">Sport</string>
+    <string name="record_detail_name_label">Name</string>
+    <string name="record_detail_weight_label">Weight</string>
+    <string name="record_detail_weight_unit">Weight</string>
+    <string name="record_detail_sets_label">Sets</string>
+    <string name="record_detail_set_label">Set %1$d</string>
+    <string name="record_detail_distance_label">Distance</string>
+    <string name="record_detail_distance_unit">m</string>
+    <string name="record_detail_time_label">Time</string>
+    <string name="record_detail_time_unit">s</string>
+    <string name="record_detail_jumps_label">Jumps</string>
+    <string name="record_detail_custom_label">Performance</string>
+    <string name="record_detail_delete">Delete</string>
+
+    <string name="storage_type_local">Local</string>
+    <string name="storage_type_remote">Remote</string>
+
+    <string name="list_item_sets">Sets: %1$s</string>
+    <string name="list_item_weight">Weight: %1$s kg</string>
+    <string name="list_item_total_work">Total work done: %1$s kg</string>
+    <string name="list_item_distance">Distance: %1$s meters</string>
+    <string name="list_item_time">Time: %1$s s</string>
+    <string name="list_item_jumps">Jumps: %1$s</string>
+    <string name="list_item_performance">Performance: %1$s</string>
+
+    <string name="filter_dialog_title">Filter</string>
+    <string name="filter_dialog_local">Local</string>
+    <string name="filter_dialog_remote">Remote</string>
+    <string name="filter_dialog_cancel">Cancel</string>
+    <string name="filter_dialog_save">Save</string>
+
+    <string name="content_description_filter_list">Filter button</string>
+    <string name="content_description_synchronize">Synchronize button</string>
+    <string name="content_description_refresh">Refresh button</string>
+
+    <string name="upload_success">Local records successfully uploaded!</string>
+    <string name="upload_failure">Upload of records was unsuccessful</string>
+    <string name="upload_no_locals">There are no local records to upload.</string>
+
+    <string name="download_success">Remote records successfully downloaded!</string>
+    <string name="download_failure">Download of records was unsuccessful</string>
+    <string name="download_no_new_data">There are no new records</string>
+
+    <string name="loading_upload">Uploading…</string>
+    <string name="loading_synchronize">Synchronizing…</string>
+
+    <string name="record_delete_error">Record couldn\'t be deleted</string>
 </resources>

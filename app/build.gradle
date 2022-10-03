@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -62,14 +64,36 @@ dependencies {
     implementation Hilt.hiltNavCompose
     kapt Hilt.hiltCompiler
 
+    implementation Retrofit.retrofit
+    implementation Retrofit.coroutineAdapter
+    implementation Gson.gson
+    implementation Moshi.moshi
+    implementation Moshi.moshiKotlin
+    implementation Moshi.moshiAdapters
+    implementation Moshi.moshiConverter
+
     implementation Compose.navigation
     implementation Compose.composeUi
     implementation Compose.composeUiTooling
     debugImplementation Compose.composeUiTooling
 
-    implementation platform('com.google.firebase:firebase-bom:30.3.0')
-    implementation 'com.google.firebase:firebase-core:21.1.1'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.0.8'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+
+
+    kapt Room.roomCompiler
+    implementation Room.roomRuntime
+    implementation Room.roomKtx
+
+    implementation Timber.timber
+
+    implementation platform(Firebase.firebaseBom)
+    implementation Firebase.firebaseCore
+    implementation Firebase.firebaseAuth
+    implementation Firebase.firebaseCrashlytics
+    implementation Firebase.firebaseAnalytics
+
+    implementation GoogleServices.mapsCompose
+    implementation GoogleServices.playServicesMaps
 
     testImplementation Testing.junit
     androidTestImplementation Testing.androidxJunit
