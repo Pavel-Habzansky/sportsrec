@@ -102,7 +102,7 @@ Record detail is a static screen listing information about given record. Record'
 We managed to build a simple application for recording sport performance in different sport types. Application is based on `Clean Architecture` principles and uses `MVVM` pattern.
 
 ### Possible improvements
-- Unit tests
+- More Unit tests
 - UI design
 - Improvement of `TopAppBar` - currently each screen has its own `TopAppBar`, this has undesired effect of `TopAppBar` briefly flashing when navigating between screens
 - Migrate `.gradle` files to `Kotlin DSL`
