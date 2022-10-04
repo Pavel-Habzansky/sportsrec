@@ -63,7 +63,7 @@ fun NewRecordScreen(
         if (permissions.values.reduce { acc, b -> acc && b }) {
             val locationProviderClient = LocationServices.getFusedLocationProviderClient(context)
             locationProviderClient.lastLocation.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+                if (task.isSuccessful && task.result != null) {
                     viewModel.onEvent(
                         NewRecordEvent.OnLocationSelected(
                             LatLng(
